@@ -5,28 +5,20 @@ public class HairStrandNode : MonoBehaviour
 {
     public HairStrand hairStrand;
 
-    public float MassValue = 1;// kg
-
     public bool isPined;
 
-    public Vector3 independentPosition;
-
-    public Vector3 Position
+    Vector3 independentPosition;
+    [HideInInspector]
+    public Vector3 TempPosition
     {
-        get
-        {
-            return isPined ? transform.position : independentPosition;
-        }
+        get => isPined ? transform.position : independentPosition;
         set
         {
-            transform.position = independentPosition = value;
+            independentPosition = value;
         }
     }
     [HideInInspector]
     public Vector3 LastPosition;
-
-    [HideInInspector]
-    public Vector3 Force;
 
     [HideInInspector]
     public Vector3 Velocity;

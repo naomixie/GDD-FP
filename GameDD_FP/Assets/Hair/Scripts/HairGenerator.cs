@@ -11,14 +11,14 @@ public class HairGenerator : MonoBehaviour
     GameObject hair;
     [SerializeField]
     [Min(1)]
-    int minDensityFactor = 1;
+    float minDensityFactor = 1;
 
     //data
     Mesh mesh;
     SphereCollider myCollider;
-    public int MinDensityFactor => minDensityFactor;
-    int densityFactor;
-    public int DensityFactor
+    public float MinDensityFactor => minDensityFactor;
+    float densityFactor;
+    public float DensityFactor
     {
         get => densityFactor;
         set
@@ -26,9 +26,18 @@ public class HairGenerator : MonoBehaviour
             if (densityFactor != value)
             {
                 densityFactor = Mathf.Max(value, 1);
+                float index = 0;
                 for(int i = 0; i < hairStrands.Count; ++i)
                 {
-                    hairStrands[i].gameObject.SetActive(i % densityFactor == 0);
+                    if(i != (int)index)
+                    {
+                        hairStrands[i].gameObject.SetActive(false);
+                    }
+                    else
+                    {
+                        hairStrands[i].gameObject.SetActive(true);
+                        index += densityFactor;
+                    }
                 }
             }
         }
@@ -49,17 +58,19 @@ public class HairGenerator : MonoBehaviour
         }
         hairStrands.ForEach(go => DestroyImmediate(go));
         hairStrands.Clear();
+        int generatedAmount = 0;
         for (int i = 0; i * MinDensityFactor < mesh.vertices.Length; ++i)
         {
-            int index = i * MinDensityFactor;
+            int index = (int)(i * MinDensityFactor);
+            ++generatedAmount;
             Vector3 pos = mesh.vertices[index];
             GameObject hairStrandObject = Instantiate(hair, transform);
             hairStrandObject.transform.localPosition = pos;
-            hairStrandObject.transform.localRotation = Quaternion.LookRotation(mesh.normals[index]);
-            hairStrandObject.transform.Rotate(new Vector3(90, 0, 0));
+            hairStrandObject.transform.up = mesh.normals[index];
             HairStrand hairStrand = hairStrandObject.GetComponentInChildren<HairStrand>();
             hairStrand.sphereCollider = myCollider;
             hairStrands.Add(hairStrand);
         }
+        print("Generated strands amount: " + generatedAmount);
     }
 }

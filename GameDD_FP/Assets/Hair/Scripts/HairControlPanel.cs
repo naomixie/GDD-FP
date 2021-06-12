@@ -18,7 +18,7 @@ public class HairControlPanel : MonoBehaviour
     public Slider hairLengthSlider;
     public float hairLengthInitial;
     public Slider hairDensitySlider;
-    public int hairDensityInitial = 1;
+    public float hairDensityInitial = 1;
     public Slider massSlider;
     public float massInitial = 0.1F;
     public Slider dragForceSlider;
@@ -58,12 +58,10 @@ public class HairControlPanel : MonoBehaviour
         dragForceSlider.value = dragForceInitial;
         hairGenerator.HairStrands.ForEach(strand => strand.Init());
         onInit = false;
-        //TODO: check why this is needed
-        OnHairLengthSliderChange(hairLengthInitial);
     }
     public void OnHairDensityChange(float value)
     {
-        hairGenerator.DensityFactor = (int)value;
+        hairGenerator.DensityFactor = value;
     }
     public void OnXRotationSliderChange(float value)
     {
@@ -79,7 +77,6 @@ public class HairControlPanel : MonoBehaviour
     }
     public void OnMassSliderChange(float value)
     {
-        hairGenerator.HairStrands.ForEach(strand => strand.UpdateStrandNodesMass());
     }
     public void OnDragForceSliderChange(float value)
     {

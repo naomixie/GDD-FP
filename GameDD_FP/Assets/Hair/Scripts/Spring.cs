@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Spring 
 {
-    public HairStrandNode mass1;
-    public HairStrandNode mass2;
+    public HairStrandNode node1;
+    public HairStrandNode node2;
     public int massIndexDistance; //neighbor: 1, farther neighbor: 2, 3, 4...
 
     public float kValue;// k only works in eular mode
@@ -14,16 +14,16 @@ public class Spring
     // mass1 -> mass2
     public Vector3 GetCurentLength()
     {
-        return mass2.Position - mass1.Position;
+        return node2.TempPosition - node1.TempPosition;
     }
     public void SetRestLength(float length, float hairCurl)
     {
+        RestLength = Equals(length, 0) ? (node1.TempPosition - node2.TempPosition).magnitude : length;
         //hair curlling
         if (massIndexDistance >= 2)
         {
-            length *= massIndexDistance * hairCurl;
+            RestLength *= massIndexDistance * hairCurl;
         }
-        RestLength = Equals(length, 0) ? (mass1.Position - mass2.Position).magnitude : length;
     }
 
 }
