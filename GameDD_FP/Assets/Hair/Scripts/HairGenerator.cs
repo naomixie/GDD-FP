@@ -15,7 +15,7 @@ public class HairGenerator : MonoBehaviour
 
     //data
     Mesh mesh;
-    SphereCollider myCollider;
+    List<TransformedSphereCollider> sphereColliders = new List<TransformedSphereCollider>();
     public float MinDensityFactor => minDensityFactor;
     float densityFactor;
     public float DensityFactor
@@ -54,7 +54,10 @@ public class HairGenerator : MonoBehaviour
         if(mesh == null)
         {
             mesh = GetComponent<MeshFilter>().mesh;
-            myCollider = GetComponent<SphereCollider>();
+            foreach(SphereCollider sphereCollider in GetComponents<SphereCollider>())
+            {
+                sphereColliders.Add(new TransformedSphereCollider(sphereCollider));
+            }
         }
         hairStrands.ForEach(go => DestroyImmediate(go));
         hairStrands.Clear();
@@ -68,7 +71,7 @@ public class HairGenerator : MonoBehaviour
             hairStrandObject.transform.localPosition = pos;
             hairStrandObject.transform.up = mesh.normals[index];
             HairStrand hairStrand = hairStrandObject.GetComponentInChildren<HairStrand>();
-            hairStrand.sphereCollider = myCollider;
+            hairStrand.sphereColliders = sphereColliders;
             hairStrands.Add(hairStrand);
         }
         print("Generated strands amount: " + generatedAmount);

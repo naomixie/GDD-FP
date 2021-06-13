@@ -7,8 +7,6 @@ public class Spring
     public HairStrandNode node1;
     public HairStrandNode node2;
     public int massIndexDistance; //neighbor: 1, farther neighbor: 2, 3, 4...
-
-    public float kValue;// k only works in eular mode
     public float RestLength { protected set; get; }
 
     // mass1 -> mass2

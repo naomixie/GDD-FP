@@ -10,6 +10,8 @@ public class HairControlPanel : MonoBehaviour
 
     [SerializeField]
     HairGenerator hairGenerator;
+    [SerializeField]
+    Vector3 gravity = new Vector3(0, -9.8f, 0);
 
     public Slider xRotationSlider;
     public float xRotationInitial;
@@ -32,6 +34,7 @@ public class HairControlPanel : MonoBehaviour
     public static float HairStrandNodeSpan => instance.hairLengthSlider.value;
     public static float HairStrandDragForce => instance.dragForceSlider.value;
     public static float HairCurl => instance.hairCurlSlider.value;
+    public static Vector3 Gravity => instance.gravity;
 
     private void Awake()
     {

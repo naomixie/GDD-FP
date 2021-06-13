@@ -7,39 +7,18 @@ public class HairStrand : MonoBehaviour
 {
     [SerializeField]
     Transform boneFather;
-    [SerializeField]
-    Vector3 Gravity = new Vector3(0, -9.8f, 0);
-    [SerializeField]
-    float springk;
-
-    [SerializeField]
-    bool wireframe = false;
 
     [SerializeField]
     SkinnedMeshRenderer meshRenderer;
 
     //data
-    public enum MethodType
-    {
-        Euler, Verlet
-    }
     float HairCarl => HairControlPanel.HairCurl;
     List<HairStrandNode> strandNodes = new List<HairStrandNode>();
     List<Spring> springs = new List<Spring>();
-    public MethodType methodType = MethodType.Verlet;
-    public SphereCollider sphereCollider;
+
+    [HideInInspector]
+    public List<TransformedSphereCollider> sphereColliders;
     bool finishedInit = false;
-    public bool ShowHairLine
-    {
-        get => wireframe;
-        set
-        {
-            if (wireframe != value)
-            {
-                UpdateHairVisibility();
-            }
-        }
-    }
     /// <summary>
     /// Called after HairControlPanel Init()
     /// </summary>
@@ -68,7 +47,6 @@ public class HairStrand : MonoBehaviour
             s.node1 = strandNodes[i - 1];
             s.node2 = strandNodes[i];
             s.massIndexDistance = 1;
-            s.kValue = springk; //only effects in eular mode
             s.SetRestLength(springRestLength, hairCurl);
             springs.Add(s);
             if (i + 1 < strandNodes.Count)
@@ -77,12 +55,10 @@ public class HairStrand : MonoBehaviour
                 s2.node1 = strandNodes[i - 1];
                 s2.node2 = strandNodes[i + 1];
                 s2.massIndexDistance = 2;
-                s2.kValue = springk; //only effects in eular mode
                 s2.SetRestLength(springRestLength, hairCurl);
                 springs.Add(s2);
             }
         }
-        UpdateHairVisibility();
         finishedInit = true;
     }
     private void FixedUpdate()
@@ -90,6 +66,7 @@ public class HairStrand : MonoBehaviour
         if (!finishedInit)
             return;
         VerletMathod(Time.fixedDeltaTime);
+        sphereColliders.ForEach(collider => collider.Update());
     }
     /// <summary>
     /// for HairControlPanel
@@ -98,14 +75,10 @@ public class HairStrand : MonoBehaviour
     {
         springs.ForEach(spring => spring.SetRestLength(HairControlPanel.HairStrandNodeSpan, HairCarl));
     }
-    private void UpdateHairVisibility()
-    {
-        meshRenderer.enabled = !wireframe;
-    }
     public void VerletMathod(float deltaTime)
     {
         //exforce (gravity, ...)
-        Vector3 exforce = Gravity / HairControlPanel.HairStrandNodeMass * deltaTime * deltaTime;
+        Vector3 exforce = HairControlPanel.Gravity / HairControlPanel.HairStrandNodeMass * deltaTime * deltaTime;
         float dragForceFactor = HairControlPanel.HairStrandDragForce;
         foreach (var node in strandNodes)
         {
@@ -139,16 +112,17 @@ public class HairStrand : MonoBehaviour
             }
         }
         //collision
-        if(sphereCollider != null)
+        foreach(TransformedSphereCollider sphereCollider in sphereColliders)
         {
-            float sphereRadius = sphereCollider.radius * sphereCollider.transform.lossyScale.x;
-            float sphereRadiusSq = sphereRadius * sphereRadius;
+            var sphereRadius = sphereCollider.Radius;
+            float sphereRadiusSq = sphereCollider.RadiusSq;
+            var sphereCenter = sphereCollider.Center;
             foreach (var item in strandNodes)
             {
-                Vector3 distVector = item.TempPosition - sphereCollider.center;
+                Vector3 distVector = item.TempPosition - sphereCenter;
                 if (distVector.sqrMagnitude < sphereRadiusSq && !item.isPined)
                 {
-                    item.TempPosition = sphereCollider.center + distVector.normalized * sphereRadius;
+                    item.TempPosition = sphereCenter + distVector.normalized * sphereRadius;
                 }
             }
         }
