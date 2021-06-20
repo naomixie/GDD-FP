@@ -293,11 +293,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1526485082}
+  - component: {fileID: 1526485077}
   - component: {fileID: 1526485081}
   - component: {fileID: 1526485080}
+  - component: {fileID: 1526485083}
   - component: {fileID: 1526485079}
   - component: {fileID: 1526485078}
-  - component: {fileID: 1526485077}
   m_Layer: 0
   m_Name: HeadModel
   m_TagString: Head
@@ -319,7 +320,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   modelControl: {fileID: 1679862111651858933}
   hair: {fileID: 8952201482253036377, guid: c9799f8097ce1474db84fa2a519d5c70, type: 3}
-  minDensityFactor: 16
+  minDensityFactor: 2
 --- !u!114 &1526485078
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -345,8 +346,8 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.13
-  m_Center: {x: 0, y: 0.01, z: 0.02}
+  m_Radius: 0.095
+  m_Center: {x: 0, y: 0.05, z: -0.01}
 --- !u!23 &1526485080
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -408,6 +409,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &1526485083
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1526485076}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.07
+  m_Center: {x: 0, y: 0.09, z: 0.13}
 --- !u!1 &2134134028
 GameObject:
   m_ObjectHideFlags: 0
@@ -2150,6 +2164,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hairGenerator: {fileID: 1526485077}
+  gravity: {x: 0, y: -9.8, z: 0}
   xRotationSlider: {fileID: 1679862111520800879}
   xRotationInitial: 0
   yRotationSlider: {fileID: 1679862110981389955}
@@ -2163,7 +2178,7 @@ MonoBehaviour:
   dragForceSlider: {fileID: 1679862111904486796}
   dragForceInitial: 0.9
   hairCurlSlider: {fileID: 1679862112807353154}
-  hairCurlInitial: 0.5
+  hairCurlInitial: 1
 --- !u!114 &1679862111651858934
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2966,7 +2981,7 @@ MonoBehaviour:
   m_Direction: 0
   m_MinValue: 1
   m_MaxValue: 8
-  m_WholeNumbers: 1
+  m_WholeNumbers: 0
   m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
@@ -4020,7 +4035,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1679862112433551969}
   m_Direction: 0
   m_MinValue: 0.1
-  m_MaxValue: 1
+  m_MaxValue: 2
   m_WholeNumbers: 0
   m_Value: 0.25
   m_OnValueChanged:

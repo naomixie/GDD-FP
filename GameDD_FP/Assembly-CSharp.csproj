@@ -74,6 +74,7 @@
     <Compile Include="Assets\Hair\Scripts\HairStrandNode.cs" />
     <Compile Include="Assets\Hair\Scripts\MCCreativeLikeMove.cs" />
     <Compile Include="Assets\Hair\Scripts\Spring.cs" />
+    <Compile Include="Assets\Hair\Scripts\TransformedSphereCollider.cs" />
     <Compile Include="Assets\IzumiTools\Scripts\Extension\IListExtension.cs" />
     <Compile Include="Assets\IzumiTools\Scripts\Extension\RectTransformExtension.cs" />
     <Compile Include="Assets\IzumiTools\Scripts\Independent\Cooldown\Cooldown.cs" />
