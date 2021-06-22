@@ -19,7 +19,7 @@ public class HairStrand : MonoBehaviour
     float HairCarl => HairControlPanel.HairCurl;
     List<HairStrandNode> strandNodes = new List<HairStrandNode>();
     List<Spring> springs = new List<Spring>();
-
+    public GameObject dyer;
     [HideInInspector]
     bool finishedInit = false;
 
@@ -190,6 +190,22 @@ public class HairStrand : MonoBehaviour
                 }
             }
         }
+        if (dyer != null)
+        {
+            SphereCollider dyeCollider = dyer.GetComponent<SphereCollider>();
+            Color dyeColor = dyer.GetComponent<Dyer>().dyeColor;
+            float sphereRadius = dyeCollider.radius * dyeCollider.transform.lossyScale.x;
+            foreach (var item in strandNodes)
+            {
+                if (Vector3.Distance(item.TempPosition, dyer.transform.position) < sphereRadius)
+                {
+                    Material hairmat = meshRenderer.material;
+                    hairmat.SetColor("_Diffuse", dyeColor);
+                }
+
+            }
+        }
+
         //apply
         for (int i = 0; i < strandNodes.Count; ++i)
         {
