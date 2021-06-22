@@ -7,7 +7,7 @@ public class ModeSwitch : MonoBehaviour
 {
     Button button;
     public GameObject toolObject;
-
+    public GameObject ColorPicker;
     void Start()
     {
         button = GetComponent<Button>();
@@ -22,5 +22,13 @@ public class ModeSwitch : MonoBehaviour
         }
         GameObject tool = Instantiate(toolObject, gameObject.transform.position, Quaternion.identity);
         HairControlPanel.instance.tool = tool;
+        if (toolObject.CompareTag("DyeTool"))
+        {
+            ColorPicker.SetActive(true);
+        }
+        else
+        {
+            ColorPicker.SetActive(false);
+        }
     }
 }
