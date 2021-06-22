@@ -34,9 +34,9 @@ public class HairGenerator : MonoBehaviour
             {
                 densityFactor = Mathf.Max(value, 1);
                 float index = 0;
-                for(int i = 0; i < hairStrands.Count; ++i)
+                for (int i = 0; i < hairStrands.Count; ++i)
                 {
-                    if(i != (int)index)
+                    if (i != (int)index)
                     {
                         hairStrands[i].gameObject.SetActive(false);
                     }
@@ -63,10 +63,10 @@ public class HairGenerator : MonoBehaviour
     }
     public void Generate()
     {
-        if(mesh == null)
+        if (mesh == null)
         {
             mesh = GetComponent<MeshFilter>().mesh;
-            foreach(SphereCollider sphereCollider in GetComponents<SphereCollider>())
+            foreach (SphereCollider sphereCollider in GetComponents<SphereCollider>())
             {
                 SphereColliders.Add(new TransformedSphereCollider(sphereCollider));
             }
@@ -84,7 +84,7 @@ public class HairGenerator : MonoBehaviour
             hairStrandObject.transform.up = mesh.normals[index];
             HairStrand hairStrand = hairStrandObject.GetComponentInChildren<HairStrand>();
             hairStrand.hairGenerator = this;
-            hairStrand.dyer = dyer;
+            // hairStrand.dyer = dyer;
             hairStrands.Add(hairStrand);
         }
         print("Generated strands amount: " + generatedAmount);

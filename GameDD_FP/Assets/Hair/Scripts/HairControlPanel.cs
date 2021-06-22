@@ -36,6 +36,9 @@ public class HairControlPanel : MonoBehaviour
     public static float HairCurl => instance.hairCurlSlider.value;
     public static Vector3 Gravity => instance.gravity;
 
+
+    public GameObject tool;
+
     private void Awake()
     {
         if (instance == null)
