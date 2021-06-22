@@ -11,9 +11,9 @@ public class TransformedSphereCollider
     public TransformedSphereCollider(SphereCollider sphereCollider)
     {
         this.sphereCollider = sphereCollider;
-        Update();
+        ParamUpdate();
     }
-    public void Update()
+    public void ParamUpdate()
     {
         Radius = sphereCollider.transform.lossyScale.x * sphereCollider.radius;
         RadiusSq = Radius * Radius;
