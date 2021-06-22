@@ -14,12 +14,12 @@ public class HairStrand : MonoBehaviour
     //data
     public HairGenerator hairGenerator;
     List<TransformedSphereCollider> SphereColliders => hairGenerator.SphereColliders;
-    HairCutter Cutter => hairGenerator.Cutter;
+    // HairCutter Cutter => hairGenerator.Cutter;
     float HairEraseY => hairGenerator.hairEraseY;
     float HairCarl => HairControlPanel.HairCurl;
     List<HairStrandNode> strandNodes = new List<HairStrandNode>();
     List<Spring> springs = new List<Spring>();
-    public GameObject dyer;
+    // public GameObject dyer;
     [HideInInspector]
     bool finishedInit = false;
 
@@ -76,7 +76,7 @@ public class HairStrand : MonoBehaviour
         }
         if (!finishedInit)
             return;
-        if(!cutted)
+        if (!cutted && HairControlPanel.instance.tool != null && HairControlPanel.instance.tool.CompareTag("CutTool"))
             CutterProcess();
         VerletMathod(Time.fixedDeltaTime);
     }
@@ -89,7 +89,7 @@ public class HairStrand : MonoBehaviour
     }
     void CutterProcess()
     {
-        TransformedSphereCollider tsphereCollider = Cutter.TSphereCollider;
+        TransformedSphereCollider tsphereCollider = GameObject.FindGameObjectWithTag("CutTool").GetComponent<HairCutter>().TSphereCollider;
         var sphereRadius = tsphereCollider.Radius;
         float sphereRadiusSq = tsphereCollider.RadiusSq;
         var sphereCenter = tsphereCollider.Center;
@@ -111,7 +111,7 @@ public class HairStrand : MonoBehaviour
                     copyStrand.Init();
                 }
             }
-            if(touchedCutter)
+            if (touchedCutter)
             {
                 var copyNode = copyStrand.strandNodes[copyIndex++];
                 copyNode.transform.position = copyNode.LastPosition = copyNode.TempPosition = item.TempPosition;
@@ -121,7 +121,7 @@ public class HairStrand : MonoBehaviour
                 item.transform.localEulerAngles = Vector3.zero;
             }
         }
-        if(copyStrand != null)
+        if (copyStrand != null)
         {
             for (; copyIndex < strandNodes.Count; ++copyIndex)
             {
@@ -174,7 +174,7 @@ public class HairStrand : MonoBehaviour
             }
         }
         //collision
-        foreach(TransformedSphereCollider sphereCollider in SphereColliders)
+        foreach (TransformedSphereCollider sphereCollider in SphereColliders)
         {
             var sphereRadius = sphereCollider.Radius;
             float sphereRadiusSq = sphereCollider.RadiusSq;
@@ -190,14 +190,14 @@ public class HairStrand : MonoBehaviour
                 }
             }
         }
-        if (dyer != null)
+        if (HairControlPanel.instance.tool != null && HairControlPanel.instance.tool.CompareTag("DyeTool"))
         {
-            SphereCollider dyeCollider = dyer.GetComponent<SphereCollider>();
-            Color dyeColor = dyer.GetComponent<Dyer>().dyeColor;
+            SphereCollider dyeCollider = HairControlPanel.instance.tool.GetComponent<SphereCollider>();
+            Color dyeColor = HairControlPanel.instance.tool.GetComponent<Dyer>().dyeColor;
             float sphereRadius = dyeCollider.radius * dyeCollider.transform.lossyScale.x;
             foreach (var item in strandNodes)
             {
-                if (Vector3.Distance(item.TempPosition, dyer.transform.position) < sphereRadius)
+                if (Vector3.Distance(item.TempPosition, HairControlPanel.instance.tool.transform.position) < sphereRadius)
                 {
                     Material hairmat = meshRenderer.material;
                     hairmat.SetColor("_Diffuse", dyeColor);

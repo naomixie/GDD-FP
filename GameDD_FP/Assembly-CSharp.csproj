@@ -75,6 +75,8 @@
      <Compile Include="Assets\IzumiTools\Scripts\Static\RomanNumerals.cs" />
      <Compile Include="Assets\IzumiTools\Scripts\UnityEditor\MyReorderbleList\ReorderableAttribute.cs" />
      <Compile Include="Assets\IzumiTools\Scripts\UnityEditor\MyReorderbleList\ReorderableListBase.cs" />
+     <Compile Include="Assets\ModeSwitch.cs" />
+     <Compile Include="Assets\ToolMovement.cs" />
      <None Include="Assets\Hair\Kajiya-Kay\Shaders\Kajiiya-Kay.shader" />
      <None Include="Assets\Customizable Skybox\Stylized Sky\Shaders\Stylized Sky.shader" />
     <Reference Include="UnityEngine">
@@ -607,9 +609,6 @@
     </Reference>
     <Reference Include="System.Xml.Serialization">
         <HintPath>C:/Program Files/Unity/Hub/Editor/2019.4.17f1c1/Editor/Data/NetStandard/compat/2.0.0/shims/netfx/System.Xml.Serialization.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Timeline.Editor">
-        <HintPath>C:/Users/naomi/Documents/GitHub/GDD-FP/GameDD_FP/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VSCode.Editor">
         <HintPath>C:/Users/naomi/Documents/GitHub/GDD-FP/GameDD_FP/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
