@@ -14,6 +14,7 @@ public class HairGenerator : MonoBehaviour
     float minDensityFactor = 1;
     [SerializeField]
     HairCutter cutter;
+    public GameObject dyer;
     [SerializeField]
     Transform hairErasePoint;
 
@@ -83,6 +84,7 @@ public class HairGenerator : MonoBehaviour
             hairStrandObject.transform.up = mesh.normals[index];
             HairStrand hairStrand = hairStrandObject.GetComponentInChildren<HairStrand>();
             hairStrand.hairGenerator = this;
+            hairStrand.dyer = dyer;
             hairStrands.Add(hairStrand);
         }
         print("Generated strands amount: " + generatedAmount);
