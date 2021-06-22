@@ -12,10 +12,16 @@ public class HairGenerator : MonoBehaviour
     [SerializeField]
     [Min(1)]
     float minDensityFactor = 1;
+    [SerializeField]
+    HairCutter cutter;
+    [SerializeField]
+    Transform hairErasePoint;
 
     //data
     Mesh mesh;
-    List<TransformedSphereCollider> sphereColliders = new List<TransformedSphereCollider>();
+    public List<TransformedSphereCollider> SphereColliders { get; protected set; }
+    public HairCutter Cutter => cutter;
+    public float hairEraseY => hairErasePoint.position.y;
     public float MinDensityFactor => minDensityFactor;
     float densityFactor;
     public float DensityFactor
@@ -46,8 +52,13 @@ public class HairGenerator : MonoBehaviour
     public List<HairStrand> HairStrands => hairStrands;
     private void Start()
     {
+        SphereColliders = new List<TransformedSphereCollider>();
         Generate();
         modelControl.Init();
+    }
+    private void FixedUpdate()
+    {
+        SphereColliders.ForEach(collider => collider.ParamUpdate());
     }
     public void Generate()
     {
@@ -56,7 +67,7 @@ public class HairGenerator : MonoBehaviour
             mesh = GetComponent<MeshFilter>().mesh;
             foreach(SphereCollider sphereCollider in GetComponents<SphereCollider>())
             {
-                sphereColliders.Add(new TransformedSphereCollider(sphereCollider));
+                SphereColliders.Add(new TransformedSphereCollider(sphereCollider));
             }
         }
         hairStrands.ForEach(go => DestroyImmediate(go));
@@ -71,7 +82,7 @@ public class HairGenerator : MonoBehaviour
             hairStrandObject.transform.localPosition = pos;
             hairStrandObject.transform.up = mesh.normals[index];
             HairStrand hairStrand = hairStrandObject.GetComponentInChildren<HairStrand>();
-            hairStrand.sphereColliders = sphereColliders;
+            hairStrand.hairGenerator = this;
             hairStrands.Add(hairStrand);
         }
         print("Generated strands amount: " + generatedAmount);

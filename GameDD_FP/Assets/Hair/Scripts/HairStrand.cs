@@ -12,13 +12,21 @@ public class HairStrand : MonoBehaviour
     SkinnedMeshRenderer meshRenderer;
 
     //data
+    public HairGenerator hairGenerator;
+    List<TransformedSphereCollider> SphereColliders => hairGenerator.SphereColliders;
+    HairCutter Cutter => hairGenerator.Cutter;
+    float HairEraseY => hairGenerator.hairEraseY;
     float HairCarl => HairControlPanel.HairCurl;
     List<HairStrandNode> strandNodes = new List<HairStrandNode>();
     List<Spring> springs = new List<Spring>();
 
     [HideInInspector]
-    public List<TransformedSphereCollider> sphereColliders;
     bool finishedInit = false;
+
+    /// <summary>
+    /// Prevent cut downed hair from cut again
+    /// </summary>
+    bool cutted = false;
     /// <summary>
     /// Called after HairControlPanel Init()
     /// </summary>
@@ -31,10 +39,8 @@ public class HairStrand : MonoBehaviour
         while (child.childCount > 0)
         {
             child = child.GetChild(0);
-            child.gameObject.AddComponent<HairStrandNode>();
             HairStrandNode strandNode = child.GetComponent<HairStrandNode>();
             strandNode.Init();
-            strandNode.hairStrand = this;
             strandNodes.Add(strandNode);
         }
         strandNodes[0].isPined = true;
@@ -63,10 +69,16 @@ public class HairStrand : MonoBehaviour
     }
     private void FixedUpdate()
     {
+        if (strandNodes[0].transform.position.y <= HairEraseY)
+        {
+            Destroy(gameObject);
+            return;
+        }
         if (!finishedInit)
             return;
+        if(!cutted)
+            CutterProcess();
         VerletMathod(Time.fixedDeltaTime);
-        sphereColliders.ForEach(collider => collider.Update());
     }
     /// <summary>
     /// for HairControlPanel
@@ -75,6 +87,54 @@ public class HairStrand : MonoBehaviour
     {
         springs.ForEach(spring => spring.SetRestLength(HairControlPanel.HairStrandNodeSpan, HairCarl));
     }
+    void CutterProcess()
+    {
+        TransformedSphereCollider tsphereCollider = Cutter.TSphereCollider;
+        var sphereRadius = tsphereCollider.Radius;
+        float sphereRadiusSq = tsphereCollider.RadiusSq;
+        var sphereCenter = tsphereCollider.Center;
+        bool touchedCutter = false;
+        HairStrand copyStrand = null;
+        int copyIndex = 0;
+        foreach (var item in strandNodes)
+        {
+            if (!item.IsActive)
+                continue;
+            if (!touchedCutter)
+            {
+                Vector3 distVector = item.TempPosition - sphereCenter;
+                float sqMagnitude = distVector.sqrMagnitude;
+                if (sqMagnitude < sphereRadiusSq)
+                {
+                    touchedCutter = true;
+                    copyStrand = Instantiate(this, null);
+                    copyStrand.Init();
+                }
+            }
+            if(touchedCutter)
+            {
+                var copyNode = copyStrand.strandNodes[copyIndex++];
+                copyNode.transform.position = copyNode.LastPosition = copyNode.TempPosition = item.TempPosition;
+                copyNode.Velocity = item.Velocity;
+                item.isFolded = true;
+                item.transform.localPosition = Vector3.zero;
+                item.transform.localEulerAngles = Vector3.zero;
+            }
+        }
+        if(copyStrand != null)
+        {
+            for (; copyIndex < strandNodes.Count; ++copyIndex)
+            {
+                var item = copyStrand.strandNodes[copyIndex];
+                item.isFolded = true;
+                item.transform.localPosition = Vector3.zero;
+                item.transform.localEulerAngles = Vector3.zero;
+            }
+            copyStrand.strandNodes[0].isPined = false;
+            copyStrand.cutted = true; // prevent cut downed hair from cut again
+            copyStrand.transform.localScale *= 30;
+        }
+    }
     public void VerletMathod(float deltaTime)
     {
         //exforce (gravity, ...)
@@ -82,7 +142,7 @@ public class HairStrand : MonoBehaviour
         float dragForceFactor = HairControlPanel.HairStrandDragForce;
         foreach (var node in strandNodes)
         {
-            if (!node.isPined)
+            if (node.IsActive)
             {
                 Vector3 tempPosition = node.TempPosition;
                 node.TempPosition += dragForceFactor * (tempPosition - node.LastPosition) + exforce;
@@ -93,6 +153,8 @@ public class HairStrand : MonoBehaviour
         foreach (var spring in springs)
         {
             HairStrandNode node1 = spring.node1, node2 = spring.node2;
+            if (node1.isFolded || node2.isFolded || (node1.isPined && node2.isPined))
+                continue;
             Vector3 subtract = node1.TempPosition - node2.TempPosition;
             float magnitude = subtract.magnitude;
             subtract *= (magnitude - spring.RestLength) / magnitude;
@@ -112,15 +174,17 @@ public class HairStrand : MonoBehaviour
             }
         }
         //collision
-        foreach(TransformedSphereCollider sphereCollider in sphereColliders)
+        foreach(TransformedSphereCollider sphereCollider in SphereColliders)
         {
             var sphereRadius = sphereCollider.Radius;
             float sphereRadiusSq = sphereCollider.RadiusSq;
             var sphereCenter = sphereCollider.Center;
             foreach (var item in strandNodes)
             {
+                if (!item.IsActive)
+                    continue;
                 Vector3 distVector = item.TempPosition - sphereCenter;
-                if (distVector.sqrMagnitude < sphereRadiusSq && !item.isPined)
+                if (distVector.sqrMagnitude < sphereRadiusSq)
                 {
                     item.TempPosition = sphereCenter + distVector.normalized * sphereRadius;
                 }
@@ -131,12 +195,12 @@ public class HairStrand : MonoBehaviour
         {
             HairStrandNode node = strandNodes[i];
             //position update
-            if (!node.isPined)
+            if (node.IsActive)
                 node.transform.position = node.TempPosition;
             //rotation update
-            if (i + 1 < strandNodes.Count) //hasNext
+            if (i + 1 < strandNodes.Count && !strandNodes[i + 1].isFolded) //hasNext
                 node.transform.up = strandNodes[i + 1].TempPosition - node.TempPosition;
-            else if (i - 1 >= 0) //hasPrev
+            else if (i - 1 >= 0 && !strandNodes[i - 1].isFolded) //hasPrev
                 node.transform.rotation = strandNodes[i - 1].transform.rotation;
         }
     }

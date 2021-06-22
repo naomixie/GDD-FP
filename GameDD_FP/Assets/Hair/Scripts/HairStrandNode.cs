@@ -7,11 +7,15 @@ public class HairStrandNode : MonoBehaviour
 
     public bool isPined;
 
+    public bool isFolded;
+
+    public bool IsActive => !isPined && !isFolded;
+
     Vector3 independentPosition;
     [HideInInspector]
     public Vector3 TempPosition
     {
-        get => isPined ? transform.position : independentPosition;
+        get => isPined || isFolded ? transform.position : independentPosition;
         set
         {
             independentPosition = value;
