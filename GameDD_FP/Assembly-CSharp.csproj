@@ -64,11 +64,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\BRDF\MaterialChange.cs" />
-    <Compile Include="Assets\BRDF\MaterialMatrixController.cs" />
-    <Compile Include="Assets\BRDF\UnitySingleton.cs" />
     <Compile Include="Assets\Hair\Scripts\FpsDisplay.cs" />
     <Compile Include="Assets\Hair\Scripts\HairControlPanel.cs" />
+    <Compile Include="Assets\Hair\Scripts\HairCutter.cs" />
     <Compile Include="Assets\Hair\Scripts\HairGenerator.cs" />
     <Compile Include="Assets\Hair\Scripts\HairStrand.cs" />
     <Compile Include="Assets\Hair\Scripts\HairStrandNode.cs" />
@@ -104,44 +102,7 @@
     <Compile Include="Assets\IzumiTools\Scripts\Static\RomanNumerals.cs" />
     <Compile Include="Assets\IzumiTools\Scripts\UnityEditor\MyReorderbleList\ReorderableAttribute.cs" />
     <Compile Include="Assets\IzumiTools\Scripts\UnityEditor\MyReorderbleList\ReorderableListBase.cs" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
-    <None Include="Assets\GrassShader\Grass.shader" />
-    <None Include="Assets\Materials\shaderHW\Shaders\Bump2.shader" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
-    <None Include="Assets\GrassShader\Shaders\CustomTessellation.cginc" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
-    <None Include="Assets\Materials\shaderHW\Shaders\BumpShader.shader" />
-    <None Include="Assets\Materials\shaderHW\Shaders\LightShader.shader" />
-    <None Include="Assets\Materials\shaderHW\Shaders\Bump3.shader" />
-    <None Include="Assets\Materials\shaderHW\Shaders\Gaussian Blur.shader" />
-    <None Include="Assets\Materials\shaderHW\Shaders\BlinnPhongShader.shader" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface.shader" />
     <None Include="Assets\Hair\Kajiya-Kay\Shaders\Kajiiya-Kay.shader" />
-    <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Custom-Atlas.shader" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF.shader" />
-    <None Include="Assets\Materials\shaderHW\Shaders\InvertedHull.shader" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile SSD.shader" />
-    <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
-    <None Include="Assets\Materials\shaderHW\Shaders\Hatching.shader" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMPro_Properties.cginc" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
-    <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
-    <None Include="Assets\Materials\shaderHW\Shaders\Bloom.shader" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
-    <None Include="Assets\Materials\shaderHW\Shaders\TextureShader.shader" />
-    <None Include="Assets\Basic Metal Texture Pack\readme.txt" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />
-    <None Include="Assets\Materials\shaderHW\Shaders\MyShader.shader" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />
-    <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile.shader" />
-    <None Include="Assets\GrassShader\Shaders\TessellationExample.shader" />
-    <None Include="Assets\TextMesh Pro\Shaders\TMP_Sprite.shader" />
-    <None Include="Assets\BRDF\MyBRDFShader.shader" />
     <Reference Include="UnityEngine">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.4.17f1c1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>

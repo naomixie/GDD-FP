@@ -64,7 +64,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Editor\CustomShaderGUI.cs" />
     <Compile Include="Assets\IzumiTools\Scripts\Extension\Editor\MaterialEditorExtension.cs" />
     <Compile Include="Assets\IzumiTools\Scripts\UnityEditor\MyReorderbleList\Editor\ReorderableListDrawer.cs" />
     <Reference Include="UnityEngine">
