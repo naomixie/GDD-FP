@@ -120,6 +120,14 @@ public class HairStrand : MonoBehaviour
     }
     void DryerProcess(HairDryer hairDryer)
     {
+        float windStr = hairDryer.windPower;
+        Vector3 windPos = hairDryer.transform.position;
+        foreach (var item in strandNodes)
+        {
+            Vector3 itemPos = item.transform.position;
+            Vector3 distVec = itemPos - windPos;
+            item.extraForce += distVec * (windStr / distVec.sqrMagnitude);
+        }
     }
     void CutterProcess(HairCutter hairCutter)
     {
@@ -148,8 +156,7 @@ public class HairStrand : MonoBehaviour
             if (touchedCutter)
             {
                 var copyNode = copyStrand.strandNodes[copyIndex++];
-                copyNode.transform.position = copyNode.LastPosition = copyNode.TempPosition = item.TempPosition;
-                copyNode.Velocity = item.Velocity;
+                copyNode.transform.position = copyNode.lastPosition = copyNode.TempPosition = item.TempPosition;
                 item.isFolded = true;
                 item.transform.localPosition = Vector3.zero;
                 item.transform.localEulerAngles = Vector3.zero;
@@ -172,15 +179,21 @@ public class HairStrand : MonoBehaviour
     public void VerletMathod(float deltaTime)
     {
         //exforce (gravity, ...)
-        Vector3 exforce = HairControlPanel.Gravity / HairControlPanel.HairStrandNodeMass * deltaTime * deltaTime;
+        float sqDeltaTimeDivMass = deltaTime * deltaTime / HairControlPanel.HairStrandNodeMass;
+        Vector3 deltaPos_gravity = HairControlPanel.Gravity * sqDeltaTimeDivMass;
         float dragForceFactor = HairControlPanel.HairStrandDragForce;
         foreach (var node in strandNodes)
         {
             if (node.IsActive)
             {
                 Vector3 tempPosition = node.TempPosition;
-                node.TempPosition += dragForceFactor * (tempPosition - node.LastPosition) + exforce;
-                node.LastPosition = tempPosition;
+                node.TempPosition += dragForceFactor * (tempPosition - node.lastPosition) + deltaPos_gravity;
+                if (node.extraForce != Vector3.zero)
+                {
+                    node.TempPosition += node.extraForce * sqDeltaTimeDivMass;
+                    node.extraForce = Vector3.zero;
+                }
+                node.lastPosition = tempPosition;
             }
         }
         //spring
@@ -190,8 +203,7 @@ public class HairStrand : MonoBehaviour
             if (node1.isFolded || node2.isFolded || (node1.isPined && node2.isPined))
                 continue;
             Vector3 subtract = node1.TempPosition - node2.TempPosition;
-            float magnitude = subtract.magnitude;
-            subtract *= (magnitude - spring.RestLength) / magnitude;
+            subtract *= 1 - spring.RestLength / subtract.magnitude;
             if (node1.isPined)
             {
                 node2.TempPosition += subtract;
