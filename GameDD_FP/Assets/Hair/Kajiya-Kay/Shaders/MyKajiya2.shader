@@ -96,7 +96,7 @@
 
 				fixed3 specular = S1 * _Specular.rgb + S2 * _Specular.rgb;
 				//Lambert
-				fixed3 diffuse = _LightColor0.rgb * _Diffuse.rgb * saturate(dot(i.worldNormal, lightDir));
+				fixed3 diffuse = _LightColor0.rgb * _Diffuse.rgb * max(0, 0.75 * dot(N, lightDir) + 0.25);
 				//对高光范围进行遮罩
 				specular *= saturate(diffuse * 2);
 				return fixed4(ambient + diffuse + specular, 1.0);
