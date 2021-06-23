@@ -17,6 +17,7 @@ public class HairGenerator : MonoBehaviour
     public GameObject dyer;
     [SerializeField]
     Transform hairErasePoint;
+    public float rotationSpeed = 5f;
 
     //data
     Mesh mesh;
@@ -60,6 +61,7 @@ public class HairGenerator : MonoBehaviour
     private void FixedUpdate()
     {
         SphereColliders.ForEach(collider => collider.ParamUpdate());
+        OnMouseDrag();
     }
     public void Generate()
     {
@@ -89,4 +91,20 @@ public class HairGenerator : MonoBehaviour
         }
         print("Generated strands amount: " + generatedAmount);
     }
+
+    void OnMouseDrag()
+    {
+        if (Input.GetMouseButton(0))
+        {
+            transform.Rotate(Vector3.down, Input.GetAxis("Mouse X") * rotationSpeed);
+
+        }
+        else if (Input.GetMouseButton(1))
+        {
+            transform.Rotate(Vector3.left, Input.GetAxis("Mouse Y") * rotationSpeed);
+        }
+
+
+    }
+
 }
