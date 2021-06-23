@@ -12,11 +12,6 @@ public class HairControlPanel : MonoBehaviour
     HairGenerator hairGenerator;
     [SerializeField]
     Vector3 gravity = new Vector3(0, -9.8f, 0);
-
-    public Slider xRotationSlider;
-    public float xRotationInitial;
-    public Slider yRotationSlider;
-    public float yRotationInitial;
     public Slider hairLengthSlider;
     public float hairLengthInitial;
     public Slider hairDensitySlider;
@@ -50,10 +45,6 @@ public class HairControlPanel : MonoBehaviour
             return;
         hairDensitySlider.onValueChanged.AddListener(OnHairDensityChange);
         hairDensitySlider.value = hairDensityInitial;
-        xRotationSlider.onValueChanged.AddListener(OnXRotationSliderChange);
-        xRotationSlider.value = xRotationInitial;
-        yRotationSlider.onValueChanged.AddListener(OnYRotationSliderChange);
-        yRotationSlider.value = yRotationInitial;
         hairLengthSlider.onValueChanged.AddListener(OnHairLengthSliderChange);
         hairLengthSlider.value = hairLengthInitial;
         hairCurlSlider.onValueChanged.AddListener(OnHairLengthSliderChange);
@@ -69,14 +60,7 @@ public class HairControlPanel : MonoBehaviour
     {
         hairGenerator.DensityFactor = value;
     }
-    public void OnXRotationSliderChange(float value)
-    {
-        hairGenerator.transform.localEulerAngles = new Vector3(value, hairGenerator.transform.localEulerAngles.y, 0);
-    }
-    public void OnYRotationSliderChange(float value)
-    {
-        hairGenerator.transform.localEulerAngles = new Vector3(hairGenerator.transform.localEulerAngles.x, value, 0);
-    }
+
     public void OnHairLengthSliderChange(float value)
     {
         hairGenerator.HairStrands.ForEach(strand => strand.UpdateSpringRestLengthAndCurl());

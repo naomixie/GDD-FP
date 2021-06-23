@@ -8,7 +8,7 @@ public class ToolMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        transform.position = new Vector3(Input.mousePosition.x / 1920 * 20 - 10, Input.mousePosition.y / 1080 * 11f - 6f, InitialDepth);
+        transform.position = new Vector3(Input.mousePosition.x / 1920 * 16 - 8, Input.mousePosition.y / 1080 * 11f - 6f, InitialDepth);
     }
 
     // Update is called once per frame
