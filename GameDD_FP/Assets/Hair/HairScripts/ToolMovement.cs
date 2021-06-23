@@ -19,7 +19,6 @@ public class ToolMovement : MonoBehaviour
 
     void UpdatePosition()
     {
-        Debug.Log(Input.GetAxis("Mouse ScrollWheel"));
         if (Input.GetAxis("Mouse ScrollWheel") > 0) // forward
         {
             transform.position = new Vector3(Input.mousePosition.x / 1920 * 20 - 10, Input.mousePosition.y / 1080 * 11f - 6f, transform.position.z + Input.GetAxis("Mouse ScrollWheel"));
