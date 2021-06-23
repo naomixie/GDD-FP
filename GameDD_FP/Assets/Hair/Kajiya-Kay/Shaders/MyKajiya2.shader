@@ -8,7 +8,6 @@
 		_Gloss2("Gloss2", Range(8.0, 256)) = 20
 		_Shift1("Shift1", float) = 0
 		_Shift2("Shift2", float) = 0
-		_AlphaTex ("Alpha Tex", 2D) = "white" {}
 		_tSpecShift("Shift Tex", 2D) = "white" {}
 	}
 
@@ -29,8 +28,6 @@
 			float _Gloss2;
 			float _Shift1;
 			float _Shift2;
-			float4 _AlphaTex_ST;
-			sampler2D _AlphaTex;
 			float4 _tSpecShift_ST;
 			sampler2D _tSpecShift;
 
@@ -48,7 +45,7 @@
 				float3 worldNormal : TEXCOORD0;
 				float3 worldPos : TEXCOORD1;
 				float3 worldBinormal : TEXCOORD2;
-				float4 uv : TEXCOORD3;
+				float2 uv : TEXCOORD3;
 			};
 
 			fixed3 ShiftTangent(fixed3 T, fixed3 N, fixed shift)
@@ -71,17 +68,13 @@
 			v2f vert(a2v v)
 			{
 				v2f o;
-				//转换顶点空间：模型=>投影
 				o.pos = UnityObjectToClipPos(v.vertex);
-				//转换顶点空间：模型=>世界
 				o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
-				//转换法线空间：模型=>世界
 				fixed3 worldNormal = UnityObjectToWorldNormal(v.normal);
 				o.worldNormal = worldNormal;
 				fixed3 worldTangent = UnityObjectToWorldDir(v.tangent.xyz);
 				o.worldBinormal = cross(worldTangent, worldNormal);
-				o.uv.xy = v.texcoord.xy * _tSpecShift_ST.xy + _tSpecShift_ST.zw;
-				o.uv.zw = v.texcoord.xy * _AlphaTex_ST.xy + _AlphaTex_ST.zw;
+				o.uv = v.texcoord * _tSpecShift_ST.xy + _tSpecShift_ST.zw;
 				return o;
 			}
 
@@ -101,9 +94,8 @@
 				float S1 = StrandSpecular(t1, viewDir, lightDir, _Gloss1);
 				float S2 = StrandSpecular(t2, viewDir, lightDir, _Gloss2);
 
-				//fixed3 specular = _LightColor0.rgb * _Specular.rgb * (S1 + S2 * _Diffuse.rgb);
 				fixed3 specular = S1 * _Specular.rgb + S2 * _Specular.rgb;
-				//Lanbert光照
+				//Lambert
 				fixed3 diffuse = _LightColor0.rgb * _Diffuse.rgb * saturate(dot(i.worldNormal, lightDir));
 				//对高光范围进行遮罩
 				specular *= saturate(diffuse * 2);
