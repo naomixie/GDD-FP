@@ -9,7 +9,7 @@ public class DyeColorControl : MonoBehaviour
     {
         if (HairControlPanel.instance.tool.CompareTag("DyeTool"))
         {
-            HairControlPanel.instance.tool.GetComponent<Dyer>().dyeColor = gameObject.GetComponent<FlexibleColorPicker>().color;
+            HairControlPanel.instance.tool.GetComponent<HairDyer>().dyeColor = gameObject.GetComponent<FlexibleColorPicker>().color;
         }
 
     }

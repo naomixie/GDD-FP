@@ -887,7 +887,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ede6476a76d33e49a8dabc8206b1147, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  toolObject: {fileID: 0}
+  toolObject: {fileID: 2077614231588783780, guid: ed9a727e54f4f15488bca5b73f053c12,
+    type: 3}
   ColorPicker: {fileID: 1150121872}
 --- !u!1 &787230922
 GameObject:

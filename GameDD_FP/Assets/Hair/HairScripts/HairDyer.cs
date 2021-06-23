@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Dyer : MonoBehaviour
+public class HairDyer : MonoBehaviour
 {
     // Start is called before the first frame update
     public Color dyeColor = new Color(131, 175, 155);

@@ -76,8 +76,23 @@ public class HairStrand : MonoBehaviour
         }
         if (!finishedInit)
             return;
-        if (!cutted && HairControlPanel.instance.tool != null && HairControlPanel.instance.tool.CompareTag("CutTool"))
-            CutterProcess();
+        GameObject currentTool = HairControlPanel.instance.tool;
+        if(currentTool != null)
+        {
+            switch(currentTool.tag)
+            {
+                case "CutTool":
+                    if (!cutted)
+                        CutterProcess(currentTool.GetComponent<HairCutter>());
+                    break;
+                case "DryTool":
+                    DryerProcess(currentTool.GetComponent<HairDryer>());
+                    break;
+                case "DyeTool":
+                    DyerProcess(currentTool.GetComponent<HairDyer>());
+                    break;
+            }
+        }
         VerletMathod(Time.fixedDeltaTime);
     }
     /// <summary>
@@ -87,9 +102,28 @@ public class HairStrand : MonoBehaviour
     {
         springs.ForEach(spring => spring.SetRestLength(HairControlPanel.HairStrandNodeSpan, HairCarl));
     }
-    void CutterProcess()
+    void DyerProcess(HairDyer hairDyer)
     {
-        TransformedSphereCollider tsphereCollider = GameObject.FindGameObjectWithTag("CutTool").GetComponent<HairCutter>().TSphereCollider;
+        SphereCollider dyeCollider = hairDyer.GetComponent<SphereCollider>();
+        Vector3 dyerPosition = hairDyer.transform.position;
+        Color dyeColor = hairDyer.dyeColor;
+        float sphereRadius = dyeCollider.radius * dyeCollider.transform.lossyScale.x;
+        foreach (var item in strandNodes)
+        {
+            if (Vector3.Distance(item.TempPosition, dyerPosition) < sphereRadius)
+            {
+                Material hairmat = meshRenderer.material;
+                hairmat.SetColor("_Diffuse", dyeColor);
+            }
+
+        }
+    }
+    void DryerProcess(HairDryer hairDryer)
+    {
+    }
+    void CutterProcess(HairCutter hairCutter)
+    {
+        TransformedSphereCollider tsphereCollider = hairCutter.TSphereCollider;
         var sphereRadius = tsphereCollider.Radius;
         float sphereRadiusSq = tsphereCollider.RadiusSq;
         var sphereCenter = tsphereCollider.Center;
@@ -188,21 +222,6 @@ public class HairStrand : MonoBehaviour
                 {
                     item.TempPosition = sphereCenter + distVector.normalized * sphereRadius;
                 }
-            }
-        }
-        if (HairControlPanel.instance.tool != null && HairControlPanel.instance.tool.CompareTag("DyeTool"))
-        {
-            SphereCollider dyeCollider = HairControlPanel.instance.tool.GetComponent<SphereCollider>();
-            Color dyeColor = HairControlPanel.instance.tool.GetComponent<Dyer>().dyeColor;
-            float sphereRadius = dyeCollider.radius * dyeCollider.transform.lossyScale.x;
-            foreach (var item in strandNodes)
-            {
-                if (Vector3.Distance(item.TempPosition, HairControlPanel.instance.tool.transform.position) < sphereRadius)
-                {
-                    Material hairmat = meshRenderer.material;
-                    hairmat.SetColor("_Diffuse", dyeColor);
-                }
-
             }
         }
 
