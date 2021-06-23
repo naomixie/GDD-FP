@@ -198,7 +198,7 @@
 
 				//3
 			Cull Front
-			ZWrite On
+			ZWrite off
 
 				CGPROGRAM
 #pragma vertex vert
@@ -287,7 +287,7 @@
 				ENDCG
 
 			Cull Back
-			ZWrite off
+			ZWrite On
 
 				CGPROGRAM
 #pragma vertex vert
