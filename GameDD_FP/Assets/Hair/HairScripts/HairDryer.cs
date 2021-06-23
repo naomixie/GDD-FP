@@ -5,5 +5,7 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public class HairDryer : MonoBehaviour
 {
-    public float WindStrength => 2.5F; //TODO: reference the value from UI
+    //inspector
+    //TODO: reference the value from UI
+    public float windPower = 15F;
 }

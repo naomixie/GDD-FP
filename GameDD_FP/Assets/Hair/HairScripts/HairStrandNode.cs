@@ -22,13 +22,13 @@ public class HairStrandNode : MonoBehaviour
         }
     }
     [HideInInspector]
-    public Vector3 LastPosition;
+    public Vector3 lastPosition;
 
     [HideInInspector]
-    public Vector3 Velocity;
+    public Vector3 extraForce;
 
     public void Init()
     {
-        independentPosition = LastPosition = transform.position;
+        independentPosition = lastPosition = transform.position;
     }
 }
