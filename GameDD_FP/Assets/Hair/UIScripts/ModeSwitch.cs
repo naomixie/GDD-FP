@@ -16,6 +16,12 @@ public class ModeSwitch : MonoBehaviour
 
     void SwitchMode()
     {
+        if (HairControlPanel.instance.tool != null && HairControlPanel.instance.tool.tag == toolObject.tag)
+        {
+            Destroy(HairControlPanel.instance.tool);
+            HairControlPanel.instance.tool = null;
+            return;
+        }
         if (HairControlPanel.instance.tool != null)
         {
             Destroy(HairControlPanel.instance.tool);
